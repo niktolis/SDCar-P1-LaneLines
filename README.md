@@ -76,7 +76,7 @@ The result as it can be seen below is indeed better because both the **white** a
 
 #### Step 6: Selecting color(s) (part 2)
 
-After a little bit of research about the coordinates of **HLS** (`Hue`,`Light` and `Saturation`) and the tool provided in [this](http://colorizer.org/) website I picked the required color levels for my color selection. The optimizing of the selection required a little bit of trial and error.
+After a little bit of research about the coordinates of **HLS** (`Hue`,`Light` and `Saturation`) and the tool provided in [this](http://colorizer.org/) website I picked the required color levels for my color selection. The optimization of the selection required a little bit of trial and error.
 
 The results were much better than the previous color selection I had above.
 

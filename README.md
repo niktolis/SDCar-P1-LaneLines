@@ -15,7 +15,7 @@ The goals / steps of this project are the following:
 
 ---
 
-### 1. Display and Write images helper function
+### 1. Display and Write images helper functions
 I defined two new helper functions for the exercise:
 1. `display` which displays the images on a given image list `imlist`. This will help during testing of each subsequent step of the pipeline applied to all input images. 
 2. `write` which writes the images from the given `imlist` to the `output_path` by combining the given names from the `imname_list` with a predefined `suffix`.
@@ -168,7 +168,7 @@ By calling them I was able to reach the final result as it was displayed in the 
 4. Blur the image by applying **gaussian** blurring function.
 5. Detect the edges by using the **Canny** algorithm function.
 6. Apply the **ROI** mask.
-7. Apply Hough line transformation and retrieve the lines.
+7. Apply **Hough** line transformation and retrieve the lines.
 8. Draw the lines on the image using averaging and extrapolation.
 
 ---
@@ -214,5 +214,7 @@ For the static parameters we can introduce smart ways to tackle with some proble
 
 * We could detect the different colors by applying different filters and masking techniques on runtime.
 * To tackle the problem with the **ROI** we could also use information from previous lanes maximum point of Hough Lines in order and use it as an input for the next frame
-* One idea would be also to normalise the perspective of the frames and then apply the line detection pipeline. This would help with different camera mounting positions and different angles on x and y axis of the road.
-* We could also improve the averaging technique of the lines by using different techniques which perform on dynamics and on steady state (e.g. *adaptive filter*).
+
+One idea would be also to normalise the perspective of the frames and then apply the line detection pipeline. This would help with different camera mounting positions and different angles on x and y axis of the road.
+
+We could also improve the averaging technique of the lines by using different techniques which perform on dynamics and on steady state (e.g. *adaptive filter*).

@@ -7,32 +7,21 @@ The goals / steps of this project are the following:
 * Make a pipeline that finds lane lines on the road
 * Reflect on your work in a written report
 
-[//]: # (Image References)
-
-[image1]: (./test_images/yellowChangeTarmacChallenge.jpg  "challengeInput")
-[image2]:./test_images_output/yellowChangeTarmacChallenge_gray.jpg "grayscale"
-[image3]:./test_images_output/yellowChangeTarmacChallenge_cs1.jpg "colorselection1"
-[image4]:./test_images_output/yellowChangeTarmacChallenge_hls.jpg "hls"
-[image5]:./test_images_output/yellowChangeTarmacChallenge_cs2.jpg "colorselection2"
-[image6]:./test_images_output/yellowChangeTarmacChallenge_blur.jpg "blur"
-[image7]:./test_images_output/yellowChangeTarmacChallenge_canny.jpg "canny"
-[image8]:./test_images_output/yellowChangeTarmacChallenge_roi.jpg "roi"
-[image9]:./test_images_output/yellowChangeTarmacChallenge_raw.jpg "hough"
-[image10]:./test_images_output/yellowChangeTarmacChallenge_final.jpg "final"
-
 ---
 
 
-[test](./test_images/solidWhiteCurve.jpg  "test")
-
 ## Reflection
 
-#### Step1: Display and Write images helper function
+---
+
+### Step1: Display and Write images helper function
 I defined two new helper functions for the exercise:
 1. `display(imlist)` which displays the images on a given image list `imlist`. This will help during testing of each subsequent step of the pipeline applied to all input images. 
 2. `write(imlist,output,path,imname_list,suffix)` which writes the images from the given `imlist` to the `output_path` by combining the given names from the `imname_list` with a predefined `suffix`.
 
-#### Step2: Load and display test images
+---
+
+### Step2: Load and display test images
 I read all the images from the given path and then use the helper function created above to display them. During the implementation of the exercise when I reached the last `challenge` video I had problems detecting the lanes. This was caused by: 
 1. The different resolution compared to the rest of the photos and videos
 2. Because of the challenges particular conditions (shades, tarmac difference, steepness of curves)
@@ -40,27 +29,37 @@ I read all the images from the given path and then use the helper function creat
 On my later iterations on the exercise, to have a feeling how my pipeline is handling the last video, I took also two screenshots from the `challenge` video during the testing phase. I tried to take two screenshots that represent the most tricky situations on detection.
 As an example on the report I will use a frame taken by the challenge video:
 
-![alt text][image1]
+![image1](./test_images/yellowChangeTarmacChallenge.jpg  "challengeInput")
 
-#### Step3: Identifying the lane line detection pipeline
+---
+
+### Step3: Identifying the lane line detection pipeline
+
+---
 
 #### 1. Grayscale color space
 
 The images contain two different colors of lines **white** and **yellow**. In order to proceed to a color selection I decided initially to convert the images to grayscale color space suspecting that the **yellow** color will be leaning towards the **white** so I can extract afterwards by selecting only one color threshold.
 
-![alt text][image2]
+![image2](./test_images_output/yellowChangeTarmacChallenge_gray.jpg "grayscale")
+
+---
 
 #### 2. Color selection
 
 It seemed that also the **yellow** lines came closer to the **white** color, which I want to get from the image, I can try color selection. Using appropriate thresholds to extract only the lines.
 
-![alt text][image3]
+![image3](./test_images_output/yellowChangeTarmacChallenge_cs1.jpg "colorselection1")
+
+---
 
 #### 3. Evaluation of the result
 
-t first glance the implication of this filtering is that on the *easy* images the result is good. But I had some trouble identifying the lanes on the *challenging* images. On my first exercise iteration I continued until the end and found out that using this color space and color selection can produce decent results on the first two videos.
+At first glance the implication of this filtering is that on the *easy* images the result is good. But I had some trouble identifying the lanes on the *challenging* images. On my first exercise iteration I continued until the end and found out that using this color space and color selection can produce decent results on the first two videos.
 
 The problem arouse when I tried to run my pipeline on the **challenge** video though. The pipeline was unable to identify a satifsying number of decent hough lines because the edges were a obscure. I realised that in order to make it work I had to do more than this.
+
+---
 
 #### 4. HLS
 
@@ -70,7 +69,9 @@ With a little bit of internet research I learnt about another colorspace which c
 
 The result as it can be seen below is indeed better because both the **white** and the **yellow** lines are pretty clear and can be extracted.
 
-![alt text][image4]
+![image4](./test_images_output/yellowChangeTarmacChallenge_hls.jpg "hls")
+
+---
 
 #### 5. Color Selection (part 2)
 
@@ -78,7 +79,9 @@ After a little bit of research about the coordinates of **HLS** (`Hue`,`Light` a
 
 The results are much better than the color selection after grayscale I had above.
 
-![alt text][image5]
+![image5](./test_images_output/yellowChangeTarmacChallenge_cs2.jpg "colorselection2")
+
+---
 
 #### 6. Gaussian blurring
 
@@ -86,7 +89,9 @@ For the next step I used the `gaussian_blur` function as I wanted to make the im
 
 * The kernel size shall be a positive odd number `(1,2,3,...,2k+1)`. 
 
-![alt text][image6]
+![image6](./test_images_output/yellowChangeTarmacChallenge_blur.jpg "blur")
+
+---
 
 #### 7. Canny algorithm for edge detection
 
@@ -94,7 +99,9 @@ As it was taught in class I applied the Canny function of [OpenCV](http://docs.o
 
 * The threshold ratio for the Canny edge detection algorithm shall be an `1:2` to `1:3` `low_threshold` vs `high threshold`.
 
-![alt text][image7]
+![image7](./test_images_output/yellowChangeTarmacChallenge_canny.jpg "canny")
+
+---
 
 #### 8. Region of Interest
 
@@ -103,7 +110,9 @@ Next step is to apply a region of interest. It made things easier by getting rid
 So I refurbished a little bit my code by implementing a function which given the input image `img`
 defines vertices proportional to the size of `x` and `y` of the image. This takes for granted that the camera on the car is mounted on the *"same"* spot. Nevertheless it was helpful for the videos provided.
 
-![alt text][image8]
+![image8](./test_images_output/yellowChangeTarmacChallenge_roi.jpg "roi")
+
+---
 
 #### 9. Hough lines algorithm
 
@@ -111,7 +120,9 @@ After that Hough lines transformation algorithm followed. Using the [OpenCV](htt
 
 At this point  I also saved the results as new images with the suffix **`raw`**  on my `test_images_output` folder.
 
-![alt text][image9]
+![image9](./test_images_output/yellowChangeTarmacChallenge_raw.jpg "hough")
+
+---
 
 #### 10. Averaging and extrapolating for the final lane lines
 
@@ -127,6 +138,8 @@ In order to get similar result as the example given I had to average the sum of 
 
 Then I defined a helper function which given the `y1` `y2` coordinates for the line points and the `lane` produces the end points of the **extrapolated** line.
 
+---
+
 #### 11. Create and draw lane lines helper functions
 
 Two more helper functions for the pipeline:
@@ -136,7 +149,9 @@ Two more helper functions for the pipeline:
 
 By calling them I was able to reach the final result as it was displayed in the example and save the images to the `test_images_output` folder with the suffix `final`
 
-![alt text][image10]
+![image10](./test_images_output/yellowChangeTarmacChallenge_final.jpg "final")
+
+---
 
 #### Long story short...
 
@@ -151,6 +166,8 @@ By calling them I was able to reach the final result as it was displayed in the 
 7. Apply Hough line transformation and retrieve the lines.
 8. Draw the lines on the image using averaging and extrapolation.
 
+---
+
 #### Then the videos came...
 
 On first iteration on the exercise the pipeline worked on the detection but the output on the video was noisy.
@@ -163,11 +180,15 @@ I needed information from the previous frames so a class implementation includin
 * `avg_lane_line` which performs the averaging of the lane lines across the frames using a simple implementation of a SMA with a moving window defined by the `frames_cnt` variable.
 * `avg_slopes` which gets the final averaged lane lines and calculates the slope. This is needed by `process_image` in order to save the slopes in the class variables and use them as a reference to filter out the extreme hough lines of the next frame. 
 
-### 2. Conclusion
+---
+
+## Conclusion
 
 The exercise was very engaging for me. Reaching an outcome was really comfortable with the notes taken from the lesson. However, in order to reach the extra mile and complete the *challenge* video required some additional effort and research. This was the most exciting part of the exercise as it unveiled to me several potentials for improvement. Also it was a nice introduction to some libraries like OpenCV and NumPy which I didn't have the chance so far to use to such extent. I believe the result, though not optimal, reached an acceptable level. There is always room for improvement.
 
-### 3. Potential shortcomings
+---
+
+## Potential shortcomings
 
 As potential shortcoming of my pipeline I identify the use of many parameters which are static and cannot be adjusted during runtime. This could cause issued if the pipeline is tried to other videos. Some examples:
 
@@ -177,7 +198,9 @@ As potential shortcoming of my pipeline I identify the use of many parameters wh
 
 The algorithm so far cannot handle curves. Especially if they are steep enough could cause issues to the detection.
 
-### 4. Possible improvements 
+---
+
+## Possible improvements 
 
 For the static parameters we can introduce smart ways to tackle with some problems. For example:
 
@@ -185,6 +208,3 @@ For the static parameters we can introduce smart ways to tackle with some proble
 * To tackle the problem with the **ROI** we could also use information from previous lanes maximum point of Hough Lines in order and use it as an input for the next frame
 * One idea would be also to normalise the perspective of the frames and then apply the line detection pipeline. This would help with different camera mounting positions and different angles on x and y axis of the road.
 * We could also improve the averaging technique of the lines by using different techniques which perform on dynamics and on steady state (e.g. *adaptive filter*).
-
-
-
